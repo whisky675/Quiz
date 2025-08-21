@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shooting My Shot</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#0f0520;
+      --bg2:#2b0037;
+      --accent:#ff4db2;
+      --cream:#fff0f8;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family: 'Press Start 2P', monospace;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:var(--cream)}
+
+    .frame{
+      width:920px;max-width:96vw;margin:32px auto;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 10px 40px rgba(0,0,0,0.6);border:4px solid rgba(255,255,255,0.03);
+      position: relative;
+      user-select:none;
+    }
+
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    h1{margin:0;font-size:14px;color:var(--accent);text-shadow:0 0 8px rgba(255,77,178,0.25)}
+
+    .controls{display:flex;gap:10px;align-items:center}
+    .btn{background:linear-gradient(180deg,#ff7fcf,#ff4db2);border-radius:8px;padding:10px 14px;color:white;border:none;cursor:pointer;font-family:inherit;font-size:11px; user-select:none;}
+    .btn:active{transform:translateY(1px)}
+
+    .hud{font-size:10px;padding:6px 8px;background:rgba(0,0,0,0.35);border-radius:6px;border:1px solid rgba(255,255,255,0.03)}
+
+    .game-area{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:10px;border-radius:8px;display:flex;justify-content:center}
+
+    canvas{background: linear-gradient(180deg,#0b0620,#1a0630);image-rendering:pixelated;border:6px solid rgba(255,255,255,0.03);border-radius:6px}
+
+    .marquee{width:100%;padding:6px 0;text-align:center;color:#ffd4ff;font-size:11px;letter-spacing:1px}
+
+    /* Start overlay */
+    #startOverlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(11,6,32,0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      cursor: pointer;
+      z-index: 99;
+    }
+    #startOverlay h2 {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: var(--accent);
+      text-shadow: 0 0 10px #ff4db2;
+    }
+    #startOverlay button {
+      background: var(--accent);
+      border: none;
+      padding: 14px 28px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 12px;
+      color: var(--cream);
+      border-radius: 10px;
+      cursor: pointer;
+      user-select:none;
+      box-shadow: 0 0 12px #ff4db2;
+      transition: background 0.3s ease;
+    }
+    #startOverlay button:hover {
+      background: #ff76c1;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <header>
+      <h1>SHOOTING MY SHOT 🤭</h1>
+      <div class="controls">
+        <div class="hud">Score: <span id="score">0</span> / <span id="goal">50</span></div>
+        <button class="btn" id="muteBtn">🔊</button>
+      </div>
+    </header>
+
+    <div class="marquee">Click or Tap to shoot 🔫 me *ik you'll love this*</div>
+
+    <div class="game-area">
+      <canvas id="gameCanvas" width="800" height="480"></canvas>
+
+      <!-- Start overlay -->
+      <div id="startOverlay">
+        <h2>Click to Start</h2>
+        <button id="startBtn">SHOOT YOUR SHOT</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const GOAL_HITS = 50;
+  const ARROW_SPEED = 10;
+  const TARGET_COUNT = 5;
+  const TARGET_BASE_SPEED = 1.4;
+
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const spriteCanvas = document.createElement('canvas');
+  spriteCanvas.width = 16; spriteCanvas.height = 16;
+  const sctx = spriteCanvas.getContext('2d');
+
+  const SPRITE_SCALE = 4;
+  const SPRITE_W = 16 * SPRITE_SCALE;
+  const SPRITE_H = 16 * SPRITE_SCALE;
+
+  const scoreEl = document.getElementById('score');
+  const goalEl = document.getElementById('goal');
+  const muteBtn = document.getElementById('muteBtn');
+  const startOverlay = document.getElementById('startOverlay');
+  const startBtn = document.getElementById('startBtn');
+
+  goalEl.textContent = GOAL_HITS;
+
+  let arrows = [];
+  let targets = [];
+  let score = 0;
+  let running = false;
+  let lastTime = 0;
+
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  let muted = false;
+
+  function playTone(frequency, duration = 0.08, type = 'sine'){
+    if(muted) return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type; o.frequency.value = frequency;
+    g.gain.value = 0.12;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    o.stop(audioCtx.currentTime + duration + 0.02);
+  }
+  function playHitSound(){ playTone(880,0.06,'square'); }
+  function playWinSound(){ playTone(1100,0.12,'sawtooth'); playTone(660,0.14,'square'); }
+
+  let arpIdx=0;
+  let arpInterval=null;
+  function startArp(){
+    if(muted) return;
+    if(arpInterval) clearInterval(arpInterval);
+    arpInterval = setInterval(()=>{
+      if(!running || muted) return;
+      const notes = [330,440,550,660];
+      playTone(notes[arpIdx%notes.length],0.06,'triangle');
+      arpIdx++;
+    }, 400);
+  }
+
+  function drawSprite(){
+    sctx.clearRect(0,0,16,16);
+    sctx.fillStyle = '#FFD1B3';
+    sctx.fillRect(6,2,4,4);
+    sctx.fillStyle = '#3b1e2b';
+    sctx.fillRect(5,1,6,2);
+    sctx.fillStyle = '#8ad2ff';
+    sctx.fillRect(5,6,6,6);
+    sctx.fillStyle = '#2b2b2b';
+    sctx.fillRect(5,12,2,3);
+    sctx.fillRect(9,12,2,3);
+  }
+
+  function drawScaledSprite(ctxMain, sprite, x, y){
+    ctxMain.imageSmoothingEnabled = false;
+    ctxMain.drawImage(sprite, 0, 0, 16, 16, x, y, SPRITE_W, SPRITE_H);
+  }
+
+  class Target{
+    constructor(x,y,speed){
+      this.x = x; this.y = y; this.speed = speed;
+      this.w = SPRITE_W; this.h = SPRITE_H;
+      this.dead = false;
+      this.hitTimer = 0;
+    }
+    update(dt){
+      if(this.dead){
+        if(this.hitTimer > 0) this.hitTimer -= dt;
+        else this.hitTimer = 0;
+        return;
+      }
+      this.x += this.speed * dt;
+      if(this.x < -this.w) this.x = canvas.width;
+      if(this.x > canvas.width + this.w) this.x = -this.w;
+    }
+    draw(ctx){
+      if(this.dead){
+        if(this.hitTimer <= 0) return;
+        const t = this.hitTimer / 20;
+        const scale = t;
+        ctx.save();
+        ctx.translate(this.x + this.w/2, this.y + this.h/2);
+        ctx.scale(scale, scale);
+        ctx.filter = 'brightness(1.6) saturate(1.5)';
+        drawScaledSprite(ctx, spriteCanvas, -this.w/2, -this.h/2);
+        ctx.restore();
+      } else {
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.fillRect(this.x+10, this.y+SPRITE_H-6, this.w-8, 6);
+        drawScaledSprite(ctx, spriteCanvas, this.x, this.y);
+      }
+    }
+  }
+
+  class Arrow{
+    constructor(x,y,tx,ty){
+      this.x = x; this.y = y;
+      const dx = tx - x; const dy = ty - y;
+      const mag = Math.hypot(dx,dy) || 1;
+      this.vx = dx/mag * ARROW_SPEED;
+      this.vy = dy/mag * ARROW_SPEED;
+      this.alive = true;
+      this.angle = Math.atan2(this.vy,this.vx);
+    }
+    update(dt){
+      if(!this.alive) return;
+      this.x += this.vx * dt;
+      this.y += this.vy * dt;
+      if(this.x < -30 || this.x > canvas.width+30 || this.y < -30 || this.y > canvas.height+30) this.alive = false;
+    }
+    draw(ctx){
+      if(!this.alive) return;
+      ctx.save();
+      ctx.translate(this.x,this.y);
+      ctx.rotate(this.angle);
+      ctx.fillStyle = '#ff4db2';
+      ctx.fillRect(-12,-2,20,4);
+      ctx.beginPath();
+      ctx.moveTo(8,0);
+      ctx.lineTo(2,-6);
+      ctx.lineTo(2,6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function spawnTargets(){
+    targets = [];
+    for(let i=0; i<TARGET_COUNT; i++){
+      const y = 40 + i*80 + Math.random()*40;
+      const dir = Math.random()>0.5?1:-1;
+      const x = dir>0 ? -SPRITE_W - Math.random()*200 : canvas.width + Math.random()*200;
+      const speed = dir * (TARGET_BASE_SPEED + Math.random()*0.8);
+      targets.push(new Target(x,y,speed));
+    }
+  }
+
+  function shootAt(tx, ty){
+    if(!running) return;
+    const startX = canvas.width/2;
+    const startY = canvas.height - 40;
+    arrows.push(new Arrow(startX, startY, tx, ty));
+    playTone(880,0.03,'sine');
+  }
+
+  function checkCollisions(){
+    arrows.forEach(ar => {
+      if(!ar.alive) return;
+      targets.forEach(t => {
+        if(t.dead) return;
+        if(ar.x > t.x && ar.x < t.x + t.w && ar.y > t.y && ar.y < t.y + t.h){
+          ar.alive = false;
+          if(!t.dead){
+            t.dead = true;
+            t.hitTimer = 20;
+            score++;
+            scoreEl.textContent = score;
+            playHitSound();
+          }
+        }
+      });
+    });
+  }
+
+  function loop(ts){
+    if(!lastTime) lastTime = ts;
+    const dt = (ts - lastTime) / 16.66;
+    lastTime = ts;
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    drawBackground();
+
+    arrows.forEach(a => a.update(dt));
+    targets.forEach(t => t.update(dt));
+
+    checkCollisions();
+
+    arrows.forEach(a => a.draw(ctx));
+    drawBow(ctx);
+    targets.forEach(t => t.draw(ctx));
+
+    arrows = arrows.filter(a => a.alive);
+    targets = targets.filter(t => t.hitTimer > 0 || !t.dead);
+
+    if(targets.length < TARGET_COUNT) spawnTargets();
+
+    if(score >= GOAL_HITS && running){
+      running = false;
+      playWinSound();
+      alert("You won! 💖 Congrats!");
+      showStartOverlay();
+      setTimeout(() => {
+    window.location.href = "icon.html";
+  }, 2000);
+    }
+
+    if(running) requestAnimationFrame(loop);
+  }
+
+  function drawBackground(){
+    const heartW = 6;
+    ctx.save();
+    ctx.globalAlpha = 0.07;
+    for(let i=0; i<12; i++){
+      const sx = (i*72 + (Date.now()/40)%200) % canvas.width;
+      const sy = 30 + (i*40) % canvas.height;
+      drawPixelHeart(ctx, sx, sy, heartW);
+    }
+    ctx.restore();
+  }
+
+  function drawPixelHeart(ctx,x,y,size){
+    ctx.fillStyle = '#ff6bb3';
+    ctx.fillRect(x, y, size, size);
+    ctx.fillRect(x+size, y, size, size);
+    ctx.fillRect(x+size/2, y+size, size, size);
+  }
+
+  function drawBow(ctx){
+    const bx = canvas.width/2;
+    const by = canvas.height - 36;
+    ctx.beginPath();
+    ctx.arc(bx,by,20,Math.PI*0.3,Math.PI*0.7);
+    ctx.strokeStyle = '#ff9adf';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    ctx.fillRect(bx-26,by+12,52,16);
+    ctx.fillStyle = 'white';
+    ctx.font = '10px "Press Start 2P"';
+    ctx.fillText('CUPID', bx-22, by+24);
+  }
+
+  canvas.addEventListener('click', e => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    shootAt(x, y);
+  });
+
+  canvas.addEventListener('touchstart', ev => {
+    ev.preventDefault();
+    const t = ev.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = (t.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (t.clientY - rect.top) * (canvas.height / rect.height);
+    shootAt(x, y);
+  }, {passive:false});
+
+  muteBtn.addEventListener('click', () => {
+    muted = !muted;
+    muteBtn.textContent = muted ? '🔇' : '🔊';
+    if(!muted) startArp();
+    else if(arpInterval) clearInterval(arpInterval);
+  });
+
+  startBtn.addEventListener('click', () => {
+    hideStartOverlay();
+    startGame();
+  });
+
+  function startGame(){
+    running = true;
+    lastTime = 0;
+    score = 0;
+    scoreEl.textContent = score;
+    spawnTargets();
+    startArp();
+    requestAnimationFrame(loop);
+  }
+
+  function showStartOverlay(){
+    startOverlay.style.display = 'flex';
+  }
+  function hideStartOverlay(){
+    startOverlay.style.display = 'none';
+  }
+
+  drawSprite();
+  showStartOverlay();
+
+  function resizeCanvas(){
+    const maxW = Math.min(window.innerWidth*0.95, 920 - 40);
+    const scale = Math.min(1, maxW / 800);
+    canvas.style.width = Math.round(800 * scale) + 'px';
+    canvas.style.height = Math.round(480 * scale) + 'px';
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+  </script>
+</body>
+</html>

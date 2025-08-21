@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mai Banunga Apka Pati</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: auto;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(270deg, #ffdee9, #8217b3, #e58fa5, #89cdf5);
+      background-size: 800% 800%;
+      animation: gradientMove 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Playfair Display", serif;;
+      text-align: center;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #app {
+      max-width: 90%;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 30px 20px;
+      border-radius: 20px;
+      backdrop-filter: blur(10%);
+      box-shadow: 0 0 15px rgba(255, 192, 203, 0.4);
+    }
+
+    .button {
+  background: linear-gradient(145deg, rgba(209, 7, 220, 0.825), rgba(236, 38, 107, 0.83));
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  color: #fef9f9;
+  font-weight: bold;
+  padding: 12px 24px;
+  cursor: pointer;
+  box-shadow: inset 1px 1px 3px rgba(191, 191, 247, 0.963),
+              0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(145deg, rgb(244, 9, 197), rgba(239, 99, 183, 0.91));
+  box-shadow: 0 0 12px rgba(0, 102, 255, 0.5);
+}
+    .screen {
+      display: none;
+    }
+
+    #scoreboard {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-size: 18px;
+      color: #0f0c0c;
+      z-index: 999;
+    }
+
+    .highlight {
+      background-color: #ff3366;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      animation: glow 1s infinite alternate;
+    }
+
+    .glow-pink {
+      background-color: #ff00ff;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      animation: glow 1s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #ff3366; }
+      to { box-shadow: 0 0 25px #ff3366; }
+    }
+
+    /* Merged YES + gift + confetti screen */
+    #confetti-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(#fff0f6, #ffe6f0);
+      z-index: 9999;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+      display: none; /* hidden initially */
+    }
+
+    #flowerCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0; /* behind text & button */
+    }
+
+    .confetti-message,
+    #giftLink {
+      position: relative;
+      z-index: 10; /* above confetti canvas */
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #ff1493;
+      text-shadow: 2px 2px 10px white;
+      animation: popIn 1s ease-in-out forwards;
+    }
+
+    #giftLink {
+      font-size: 1.2rem;
+      padding: 12px 24px;
+      background-color: #ff69b4;
+      color: #fff;
+      border-radius: 20px;
+      text-decoration: none;
+      box-shadow: 0 0 10px #ff69b4;
+      transition: transform 0.2s;
+    }
+
+    #giftLink:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Merged YES + gift + confetti screen -->
+  <div id="confetti-screen">
+    <div class="confetti-message">YOU SAID YES! OMMZZEEE 🥹💕<br>You are the moment my life stopped being ordinary and began to feel like a dream</div>
+    <a id="giftLink" href="#" target="_blank" class="button"> now click here hehe 🤭🤭</a>
+    <canvas id="flowerCanvas"></canvas>
+  </div>
+
+  <audio id="correctSound" src="yippe.wav" preload="auto"></audio>
+  <audio id="clickSound" src="click.wav" preload="auto"></audio>
+  <div id="scoreboard">Score: 0</div>
+
+  <div id="app">
+    <div id="intro">
+      <h1>Hey Senorita, Would you like to play "Mai Banunga Apka Pati"?</h1>
+      <button class="button" onclick="startQuiz()">Yeahh lessgoo</button>
+      <button class="button" onclick="showNoMessage()">Nuhh uhh</button>
+    </div>
+
+    <div id="no-message" class="screen">
+      <h2>khel lo ji plsssssssssssssssssssssss🥺</h2>
+    </div>
+
+    <div id="quiz-container" class="screen">
+      <h2 id="question-text"></h2>
+      <div id="options-container"></div>
+      <div id="result" style="margin-top: 10px;"></div>
+    </div>
+
+    <div id="high-value-intro" class="screen">
+      <div class="highlight">🌟 High Value Questions Incoming! 🌟</div>
+      <button class="button" onclick="startHighValue()">Continue</button>
+    </div>
+
+    <div id="proposal-intro" class="screen">
+      <div class="glow-pink">Ready for your Million Dollar Question?</div>
+      <button class="button" onclick="showFinalProposal()">YES</button>
+    </div>
+
+    <div id="million-dollar" class="screen">
+      <h2>The Million Dollar Question 💎</h2>
+      <p>You inspire me to dream beyond limits, to keep going when I feel like giving up. Every day without talking to you feels empty… so, I’m asking — Can I keep you close, always? or... <br> Will you be ma chérie/ mi reina/ Kareshi no kanojo/ प्रेमिका ... or my girlfriend 🙈🫣🤭💝?</p>
+      <button class="button" onclick="handleMillionAnswer('YASSS')">YASSS 🤭</button>
+      <button class="button" onclick="handleMillionAnswer('Yess hehe')">Yess hehe 😋</button>
+      <button class="button" onclick="handleMillionAnswer('DM')">DM mein bataungi 😍</button>
+    </div>
+
+    <div id="wait-message" class="screen">
+      <h2>Hehe, I’ll wait for your DM then 😌</h2>
+      <p>ngl i am nervous</p>
+    </div>
+
+  </div>
+
+  <script>
+    const gkQuestions = [
+      { question: "What is the capital of France?", options: ["Berlin", "Paris", "Rome", "Madrid"], answer: "Paris" },
+      { question: "Which planet is known as the Red Planet?", options: ["Earth", "Venus", "Mars", "Jupiter"], answer: "Mars" },
+      { question: "Who wrote 'The Magic Mirror (1989)'?", options: ["Shakespeare", "Sylvia Plath", "Premchand", "Tolstoy"], answer: "Sylvia Plath" },
+      { question: "What’s 2+2?", options: ["2", "22", "4", "40"], answer: "22" },
+      { question: "What do pandas mostly eat?", options: ["Fish", "Bamboo", "Vises ka sar", "Fruits"], answer: "Vises ka sar" },
+      { question: "Parul ka weight kitna hai?", options: ["100kg", "435kg", "901kg", "That thing cannot be weighed"], answer: "That thing cannot be weighed" },
+      { question: "Which is the largest & deepest ocean?", options: ["Indian", "Pacific", "aapki aankhein 🙈", "Arctic"], answer: "aapki aankhein 🙈" },
+      { question: "Which bird is known for mimicking sounds?", options: ["Sparrow", "Crow", "Lyrebird", "vises ki dadi"], answer: "vises ki dadi" },
+      { question: "Which animal is called the ship of the desert?", options: ["Horse", "Camel", "Elephant", "vises ka fufa"], answer: "vises ka fufa" },
+      { question: "What was the name of the ship that sank in 1912?", options: ["Britannic", "Titanic", "Olympic", "Queen Mary"], answer: "Titanic" },
+      { question: "Which animal is the laziest in the world?", options: ["Sloth", "Vises", "Subda 🤭", "Cat"], answer: "Subda 🤭" },
+      { question: "Which empire built the Colosseum?", options: ["Greek", "Roman", "Vises ka taau", "Persian"], answer: "Vises ka taau" }
+    ];
+
+    const highValueQuestions = [
+      { question: "How do I make you feel?", options: ["Mood accha kar dete ho yawr 😍", "Dimag kharab 🙄;", "Dil garden garden 🤭", "All Of the above"], answer: "All Of the above" },
+      { question: "Mera wallet khali karogi?", options: ["HELL YEAAH", "wallet?? account bhi", "thoda sa", "paise dungi mai toh"], answer: "wallet?? account bhi" },
+      { question: "Do you REALLY think I am gay?", options: ["yea duhh", "no"], answer: "no" },
+      { question: "Mere sath sundar sundar cafes/restros chalogi?", options: ["LESSSGOOO", "bill is on you", "golgappe challenge too", "ALL OF THE ABOVE"], answer: "ALL OF THE ABOVE" },
+      { question: "Can you picture us together?", options: ["yepp, I can", "hmmmm, lemme think", "well tbh, no"], answer: "yepp, I can" },
+      { question: "Kya apko ye nigga 🙋🏻‍♂️ qubool hai?", options: ["QUBOOL HAI x3", "chal jayega", "Nahi"], answer: null },
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let stage = 'gk';
+
+    function updateScore(value) {
+      score += value;
+      document.getElementById("scoreboard").innerText = `Score: ${score}`;
+    }
+
+    function startQuiz() {
+      document.getElementById("intro").style.display = "none";
+      document.getElementById("quiz-container").style.display = "block";
+      stage = 'gk';
+      currentQuestion = 0;
+      showQuestion();
+    }
+
+    function showNoMessage() {
+      document.getElementById("intro").style.display = "none";
+      document.getElementById("no-message").style.display = "block";
+    }
+
+    function showQuestion() {
+      const q = stage === 'gk' ? gkQuestions[currentQuestion] : highValueQuestions[currentQuestion];
+      document.getElementById("question-text").innerText = q.question;
+      const container = document.getElementById("options-container");
+      container.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.className = "button";
+        btn.innerText = option;
+        btn.onclick = () => checkAnswer(option);
+        container.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+  const q = stage === 'gk' ? gkQuestions[currentQuestion] : highValueQuestions[currentQuestion];
+  const correct = q.answer;
+  const result = document.getElementById("result");
+
+  // Special handling for "Can you picture us together?"
+  if (q.question === "Can you picture us together?" && selected !== "yepp, I can") {
+    result.innerText = "It's okay, I understand..";
+    // Stop quiz progression here
+    return;
+  }
+
+  if (correct === null || correct === undefined) {
+    currentQuestion++;
+
+    if (stage === 'gk' && currentQuestion === gkQuestions.length) {
+      document.getElementById("quiz-container").style.display = "none";
+      document.getElementById("high-value-intro").style.display = "block";
+    } else if (stage === 'high' && currentQuestion === highValueQuestions.length) {
+      document.getElementById("quiz-container").style.display = "none";
+      document.getElementById("proposal-intro").style.display = "block";
+    } else {
+      setTimeout(() => {
+        result.innerText = "";
+        showQuestion();
+      }, 300);
+    }
+    return;
+  }
+
+  if (selected === correct) {
+    updateScore(stage === 'gk' ? 100 : 300);
+    result.innerText = "SAHI JAWAB 👏";
+    currentQuestion++;
+
+    if (stage === 'gk' && currentQuestion === gkQuestions.length) {
+      document.getElementById("quiz-container").style.display = "none";
+      document.getElementById("high-value-intro").style.display = "block";
+    } else if (stage === 'high' && currentQuestion === highValueQuestions.length) {
+      document.getElementById("quiz-container").style.display = "none";
+      document.getElementById("proposal-intro").style.display = "block";
+    } else {
+      setTimeout(() => {
+        result.innerText = "";
+        showQuestion();
+      }, 800);
+    }
+  } else {
+    result.innerText = "Nuhh Uhh! Try again";
+  }
+}
+
+
+    function handleMillionAnswer(answer) {
+      document.getElementById("million-dollar").style.display = "none";
+
+      if (answer === "YASSS" || answer === "Yess hehe") {
+        // Show merged confetti + gift screen
+        const confettiScreen = document.getElementById("confetti-screen");
+        confettiScreen.style.display = "flex"; // flex for vertical alignment & centering
+
+        // Update gift link dynamically
+        document.getElementById("giftLink").href = "https://drive.google.com/your-gift-link";
+
+        showFlowerConfetti(); // 💐 Trigger confetti animation
+      } else {
+        document.getElementById("wait-message").style.display = "block";
+      }
+    }
+
+    function startHighValue() {
+      stage = 'high';
+      currentQuestion = 0;
+      document.getElementById("high-value-intro").style.display = "none";
+      document.getElementById("quiz-container").style.display = "block";
+      showQuestion();
+    }
+
+    function showFinalProposal() {
+      document.getElementById("proposal-intro").style.display = "none";
+      document.getElementById("million-dollar").style.display = "block";
+    }
+
+    // Flower confetti animation function
+    function showFlowerConfetti() {
+      const confettiScreen = document.getElementById("confetti-screen");
+      confettiScreen.style.display = "flex";
+
+      const canvas = document.getElementById("flowerCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const flowers = [];
+      const emoji = "🏵️";
+
+      for (let i = 0; i < 50; i++) {
+        flowers.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: 24 + Math.random() * 10,
+          speed: 1 + Math.random() * 2,
+          sway: Math.random() * 2,
+          swayDir: Math.random() < 0.5 ? -1 : 1
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "24px serif";
+        for (let f of flowers) {
+          ctx.save();
+          ctx.font = `${f.size}px serif`;
+          ctx.fillText(emoji, f.x, f.y);
+          ctx.restore();
+
+          f.y += f.speed;
+          f.x += f.sway * f.swayDir;
+
+          if (f.y > canvas.height) {
+            f.y = -30;
+            f.x = Math.random() * canvas.width;
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    }
+  </script>
+
+  <script>
+    const clickSound = document.getElementById("clickSound");
+    const correctSound = document.getElementById("correctSound");
+
+    document.querySelectorAll("button").forEach(button => {
+      button.addEventListener("click", () => {
+        clickSound.currentTime = 0;
+        clickSound.play();
+      });
+    });
+  </script>
+</body>
+</html>
