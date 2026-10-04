@@ -17,7 +17,7 @@
             height: 100%;
             overflow: hidden;
             position: fixed;
-            background: linear-gradient(45deg, #FCEDD8 0%, #FFD464 25%, #FF5E5E 50%, #E23C64 75%, #B0183D 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
         
         .container {
@@ -25,7 +25,8 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            background: rgba(255, 255, 255, 0.95);
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            backdrop-filter: blur(10px);
         }
         
         .screen {
@@ -40,7 +41,8 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #FF5E5E 0%, #E23C64 50%, #B0183D 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             color: white;
             padding: 20px;
             text-align: center;
@@ -108,7 +110,7 @@
         
         .option.selected {
             border-color: #E23C64;
-            background: linear-gradient(135deg, #FF5E5E 0%, #E23C64 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
         
@@ -122,7 +124,7 @@
             padding: 15px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, #FF5E5E 0%, #E23C64 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             font-size: 16px;
             font-weight: bold;
