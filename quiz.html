@@ -439,7 +439,7 @@
             document.getElementById('progressFill').style.width = progress + '%';
         }
         
-        function createConfetti(element) {
+                function createConfetti(element) {
             const emojis = ['✨'];
             const rect = element.getBoundingClientRect();
             const x = rect.left + rect.width / 2;
@@ -455,10 +455,31 @@
                     document.body.appendChild(confetti);
                     
                     setTimeout(() => confetti.remove(), 1500);
-                }
-
+                }, i * 30);
+            }
+        }
+        
         // Romantic confetti for quiz
         function createQuizConfetti(element) {
+            const rect = element.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            const hearts = ['💖', '✨', '💕', '🎊', '🎉'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'quiz-confetti';
+                    confetti.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    confetti.style.left = x + 'px';
+                    confetti.style.top = y + 'px';
+                    confetti.style.fontSize = (18 + Math.random() * 15) + 'px';
+                    confetti.style.color = ['#FFD700', '#D4AF37', '#FF69B4', '#FFFFFF'][Math.floor(Math.random() * 4)];
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 1500);
+                }, i * 50);
+            }
+        }function createQuizConfetti(element) {
             const rect = element.getBoundingClientRect();
             const x = rect.left + rect.width / 2;
             const y = rect.top + rect.height / 2;

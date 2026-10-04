@@ -304,6 +304,61 @@
             }
 
         // Romantic confetti function
+        
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+                
+                // Check collision
+                for (let i = targets.length - 1; i >= 0; i--) {
+                    const t = targets[i];
+                    const dx = this.x - t.x;
+                    const dy = this.y - t.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 40) {
+                        // Hit!
+                        score += 2;
+                        createRomanticConfetti(t.x, t.y);
+                        scoreText.textContent = 'Score: ' + score;
+                        
+                        // Show points
+                        const popup = document.createElement('div');
+                        popup.className = 'points';
+                        popup.textContent = '+2';
+                        popup.style.left = t.x + 'px';
+                        popup.style.top = t.y + 'px';
+                        document.body.appendChild(popup);
+                        setTimeout(() => popup.remove(), 800);
+                        
+                        // Remove target
+                        t.el.remove();
+                        targets.splice(i, 1);
+                        
+                        // Remove bullet
+                        this.element.remove();
+                        
+                        // Check win condition
+                        if (score >= 100) {
+                            endGame();
+                        }
+                        
+                        return false; // Bullet is done
+                    }
+                }
+                
+                // Remove if off screen
+                if (this.x < -50 || this.x > window.innerWidth + 50 || 
+                    this.y < -50 || this.y > window.innerHeight + 50) {
+                    this.element.remove();
+                    return false;
+                }
+                
+                return true; // Bullet still active
+            }
+        }
         function createRomanticConfetti(x, y) {
             const hearts = ['💖', '✨', '💕', '🎊', '🎉'];
             for (let i = 0; i < 25; i++) {
