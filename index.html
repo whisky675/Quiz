@@ -1,248 +1,737 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Romantic Shooting Game</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <title>Goli maar</title>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; overflow: hidden; position: fixed; touch-action: none; background: linear-gradient(135deg, #4a1e5a 0%, #8a2be2 50%, #ff69b4 100%); font-family: 'Cormorant Garamond', serif; }
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(10deg); } }
-        .heart-bg { position: fixed; font-size: 24px; color: rgba(255,105,180,0.3); animation: float 6s infinite ease-in-out; pointer-events: none; z-index: 1; }
-        #score { position: fixed; top: 20px; left: 20px; color: #ffd700; font-size: 28px; font-weight: 600; text-shadow: 0 0 10px rgba(255,215,0,0.5); z-index: 100; pointer-events: none; padding: 10px 20px; background: rgba(74,30,90,0.3); border-radius: 10px; border: 2px solid #ffd700; }
-        #startScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(74,30,90,0.95); z-index: 1000; padding: 20px; }
-        #startScreen h1 { color: #ffd700; font-size: 42px; text-align: center; margin-bottom: 30px; font-weight: 700; font-style: italic; text-shadow: 0 0 20px rgba(255,215,0,0.5); }
-        #startScreen p { color: #ffb6c1; text-align: center; margin: 15px 0; font-size: 20px; }
-        #startBtn { margin-top: 40px; padding: 18px 36px; border: 3px solid #ffd700; border-radius: 10px; background: rgba(255,215,0,0.2); color: #ffd700; font-size: 22px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        #startBtn:hover { background: rgba(255,215,0,0.4); transform: scale(1.05); }
-        #completionScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; background: rgba(74,30,90,0.98); z-index: 1000; text-align: center; padding: 20px; }
-        #completionScreen.active { display: flex; }
-        #completionScreen h1 { color: #ffd700; font-size: 48px; margin-bottom: 30px; font-weight: 700; font-style: italic; text-shadow: 0 0 20px rgba(255,215,0,0.5); }
-        #completionScreen p { color: #ffb6c1; font-size: 24px; margin: 20px 0; }
-        #redirectCountdown { color: #ffd700; font-size: 28px; margin-top: 40px; font-weight: 600; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
-        .target { position: absolute; font-size: 48px; user-select: none; pointer-events: none; filter: drop-shadow(0 0 8px #ff69b4); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        #gun { position: fixed; bottom: 40px; left: 50%; width: 16px; height: 80px; background: #ffd700; border-radius: 8px; box-shadow: 0 0 20px #ffd700; transform: translateX(-50%); transform-origin: bottom center; pointer-events: none; z-index: 5; }
-        .bullet { position: absolute; width: 10px; height: 10px; background: #ff69b4; border-radius: 50%; box-shadow: 0 0 15px #ff69b4; pointer-events: none; z-index: 4; }
-        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-60px); } }
-        .points { position: fixed; color: #ffd700; font-size: 28px; font-weight: bold; pointer-events: none; animation: floatUp 1s forwards; z-index: 99; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
-        @keyframes confettiFall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
-        .confetti { position: fixed; font-size: 24px; pointer-events: none; z-index: 100; animation: confettiFall 2s ease-out forwards; }
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+            -webkit-tap-highlight-color: transparent;
+
+        }
+
+                html, body {
+
+            width: 100%;
+
+            height: 100%;
+
+            overflow: hidden;
+
+            position: fixed;
+
+            touch-action: none;
+
+            background: linear-gradient(-45deg, #0f0f23, #1a1033, #24103d, #0b1f2a);
+
+            background-size: 400% 400%;
+
+            animation: nebula 10s ease infinite;
+
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+
+        }
+
+        #score {
+
+            position: fixed;
+
+            top: 20px;
+
+            left: 20px;
+
+            color: #f8e16c;
+
+            font-size: 24px;
+
+            font-family: monospace;
+
+            text-shadow: 3px 3px 0 #5a1646, 0 0 10px #f5c542;
+
+            z-index: 100;
+
+            pointer-events: none;
+
+        }
+
+        #game {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+        }
+
+.target {
+
+            position: absolute;
+
+            font-size: 40px;
+
+            user-select: none;
+
+            pointer-events: none;
+
+        }
+
+        #gun {
+
+            position: fixed;
+
+            bottom: 30px;
+
+            left: 50%;
+
+            width: 15px;
+
+            height: 70px;
+
+            background: #ff4f8b;
+
+            border-radius: 7px;
+
+            box-shadow: 0 0 15px #ff4f8b, 0 0 30px #f8e16c;
+
+            transform: translateX(-50%);
+
+            transform-origin: bottom center;
+
+            pointer-events: none;
+
+            z-index: 5;
+
+        }
+
+.bullet {
+
+            position: absolute;
+
+            width: 8px;
+
+            height: 8px;
+
+            background: #f8e16c;
+
+            border-radius: 50%;
+
+            box-shadow: 0 0 12px #f8e16c, 0 0 24px rgba(248, 225, 108, 0.6);
+
+            pointer-events: none;
+
+        }
+
+.points {
+
+            position: fixed;
+
+            color: #f8e16c;
+
+            font-size: 24px;
+
+            font-weight: bold;
+
+            pointer-events: none;
+
+            animation: floatUp 0.8s forwards;
+
+            z-index: 99;
+
+        }
+
+        @keyframes floatUp {
+
+            from { opacity: 1; transform: translateY(0); }
+
+            to { opacity: 0; transform: translateY(-50px); }
+
+        }
+
+        #startScreen {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background: rgba(15, 15, 35, 0.96);
+
+            z-index: 1000;
+
+            padding: 20px;
+
+        }
+
+        #startScreen h1 {
+
+            color: #ff4f8b;
+
+            font-size: 32px;
+
+            text-align: center;
+
+            margin-bottom: 20px;
+
+            text-shadow: 4px 4px 0 #5a1646, 0 0 18px #ff4f8b;
+
+        }
+
+        #startScreen p {
+
+            color: white;
+
+            text-align: center;
+
+            margin: 10px 0;
+
+            font-size: 16px;
+
+        }
+
+        #startBtn {
+
+            margin-top: 30px;
+
+            padding: 15px 30px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #5a1646;
+
+            color: white;
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+            box-shadow: 5px 5px 0 #f8e16c, 0 0 20px rgba(255, 79, 139, 0.55);
+
+        }
+
+        #completionScreen {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            display: none;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background: rgba(15, 15, 35, 0.98);
+
+            z-index: 1000;
+
+            text-align: center;
+
+            padding: 20px;
+
+        }
+
+        #completionScreen.active {
+
+            display: flex;
+
+        }
+
+        #completionScreen h1 {
+
+            color: #72f1b8;
+
+            font-size: 36px;
+
+            margin-bottom: 20px;
+
+            text-shadow: 4px 4px 0 #173f35, 0 0 18px #72f1b8;
+
+        }
+
+        #completionScreen p {
+
+            color: #8be9fd;
+
+            font-size: 18px;
+
+            margin: 10px 0;
+
+        }
+
+        #redirectCountdown {
+
+            color: #ff4f8b;
+
+            font-size: 20px;
+
+            margin-top: 30px;
+
+            text-shadow: 0 0 12px #ff4f8b;
+
+        }
+
     </style>
+
 </head>
+
 <body>
+
     <div id="startScreen">
-        <h1>💘 Romantic Shooting Game 💘</h1>
-        <p>Shoot the floating hearts!</p>
-        <p>+2 points for each hit</p>
-        <p>Reach 100 points to win!</p>
+
+        <h1>SHOOT VISHESH</h1>
+
+        <p>Tap anywhere to shoot!</p>
+
+        <p>+2 points per hit</p>
+
+        <p>Reach 100 to win!</p>
+
         <button id="startBtn">START GAME</button>
+
     </div>
+
     <div id="completionScreen">
-        <h1>🎉 Congratulations! 🎉</h1>
-        <p>You've captured all the hearts!</p>
-        <p>Get ready for the romantic quiz...</p>
+
+        <h1>CONGRATS!</h1>
+
+        <p>You completed the game!</p>
+
+        <p>Get ready for the quiz...</p>
+
         <div id="redirectCountdown">Redirecting in 5...</div>
+
     </div>
+
     <div id="score">Score: 0</div>
-    <div id="game"><div id="gun"></div></div>
+
+    <div id="game">
+
+        <div id="gun"></div>
+
+    </div>
+
     <script>
-        function createHearts() {
-            for (let i = 0; i < 20; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart-bg';
-                heart.innerHTML = '💖';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.top = Math.random() * 100 + '%';
-                heart.style.fontSize = (20 + Math.random() * 30) + 'px';
-                heart.style.animationDelay = Math.random() * 5 + 's';
-                heart.style.opacity = 0.2 + Math.random() * 0.3;
-                document.body.appendChild(heart);
-            }
-        }
-        createHearts();
-        
+
+// Game elements
+
         const game = document.getElementById('game');
+
         const gun = document.getElementById('gun');
+
         const scoreText = document.getElementById('score');
+
         const startBtn = document.getElementById('startBtn');
+
         const startScreen = document.getElementById('startScreen');
+
         const completionScreen = document.getElementById('completionScreen');
-        
+
+// Game state
+
         let score = 0;
+
         let targets = [];
+
         let bullets = [];
+
         let gameRunning = false;
+
         let spawnInterval = null;
-        
-        startBtn.addEventListener('click', () => {
+
+// Start game
+
+        startBtn.addEventListener('click', startGame);
+
+        startBtn.addEventListener('touchend', (e) => {
+
+            e.preventDefault();
+
+            startGame();
+
+        });
+
+        function startGame() {
+
             startScreen.style.display = 'none';
+
             gameRunning = true;
+
             score = 0;
+
             scoreText.textContent = 'Score: 0';
-            spawnInterval = setInterval(spawnTarget, 800);
+
+// Spawn targets every second
+
+            spawnInterval = setInterval(spawnTarget, 1000);
+
+// Start game loop
+
             requestAnimationFrame(updateLoop);
-        });
-        
+
+        }
+
         function spawnTarget() {
+
             if (!gameRunning) return;
+
             const target = document.createElement('div');
+
             target.className = 'target';
-            target.innerHTML = '💖';
+
+            target.textContent = '👨';
+
+// Random position and direction
+
             const fromLeft = Math.random() > 0.5;
-            const x = fromLeft ? -80 : window.innerWidth + 80;
+
+            const x = fromLeft ? -60 : window.innerWidth + 60;
+
             const y = Math.random() * (window.innerHeight * 0.7);
+
             const speed = 1 + Math.random() * 2;
+
             target.style.left = x + 'px';
+
             target.style.top = y + 'px';
+
             game.appendChild(target);
-            targets.push({ el: target, x: x, y: y, speed: speed, direction: fromLeft ? 1 : -1 });
+
+            targets.push({
+
+                el: target,
+
+                x: x,
+
+                y: y,
+
+                speed: speed,
+
+                direction: fromLeft ? 1 : -1
+
+            });
+
         }
-        
+
         function updateTargets() {
+
             for (let i = targets.length - 1; i >= 0; i--) {
+
                 const t = targets[i];
+
                 t.x += t.speed * t.direction;
+
                 t.el.style.left = t.x + 'px';
-                if (t.x < -150 || t.x > window.innerWidth + 150) {
+
+// Remove if off screen
+
+                if (t.x < -100 || t.x > window.innerWidth + 100) {
+
                     t.el.remove();
+
                     targets.splice(i, 1);
+
                 }
+
             }
+
         }
-        
-        function createConfetti(x, y) {
-            const hearts = ['💖', '💕', '✨', '🎊', '🎉'];
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
-                    confetti.style.left = x + 'px';
-                    confetti.style.top = y + 'px';
-                    confetti.style.fontSize = (20 + Math.random() * 25) + 'px';
-                    confetti.style.color = ['#ffd700', '#ff69b4', '#ffb6c1', '#ffffff'][Math.floor(Math.random() * 4)];
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 2000);
-                }, i * 50);
-            }
-        }
-        
+
         class Bullet {
+
             constructor(startX, startY, angle) {
-                this.x = startX;
-                this.y = startY;
-                this.vx = Math.cos(angle) * 18;
-                this.vy = Math.sin(angle) * 18;
-                this.element = document.createElement('div');
-                this.element.className = 'bullet';
-                this.element.style.left = this.x + 'px';
-                this.element.style.top = this.y + 'px';
+
+this.x = startX;
+
+this.y = startY;
+
+this.vx = Math.cos(angle) * 15;
+
+this.vy = Math.sin(angle) * 15;
+
+this.element = document.createElement('div');
+
+this.element.className = 'bullet';
+
+this.element.style.left = this.x + 'px';
+
+this.element.style.top = this.y + 'px';
+
                 game.appendChild(this.element);
+
             }
+
             update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.element.style.left = this.x + 'px';
-                this.element.style.top = this.y + 'px';
+
+this.x += this.vx;
+
+this.y += this.vy;
+
+this.element.style.left = this.x + 'px';
+
+this.element.style.top = this.y + 'px';
+
+// Check collision
+
                 for (let i = targets.length - 1; i >= 0; i--) {
+
                     const t = targets[i];
+
                     const dx = this.x - t.x;
+
                     const dy = this.y - t.y;
+
                     const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 50) {
+
+                    if (dist < 40) {
+
+// Hit!
+
                         score += 2;
+
                         scoreText.textContent = 'Score: ' + score;
-                        createConfetti(t.x, t.y);
+
+// Show points
+
                         const popup = document.createElement('div');
+
                         popup.className = 'points';
+
                         popup.textContent = '+2';
+
                         popup.style.left = t.x + 'px';
+
                         popup.style.top = t.y + 'px';
+
                         document.body.appendChild(popup);
-                        setTimeout(() => popup.remove(), 1000);
+
+                        setTimeout(() => popup.remove(), 800);
+
+// Remove target
+
                         t.el.remove();
+
                         targets.splice(i, 1);
-                        this.element.remove();
-                        if (score >= 100) endGame();
-                        return false;
+
+// Remove bullet
+
+this.element.remove();
+
+// Check win condition
+
+                        if (score >= 100) {
+
+                            endGame();
+
+                        }
+
+                        return false; // Bullet is done
+
                     }
+
                 }
-                if (this.x < -100 || this.x > window.innerWidth + 100 || this.y < -100 || this.y > window.innerHeight + 100) {
-                    this.element.remove();
+
+// Remove if off screen
+
+                if (this.x < -50 || this.x > window.innerWidth + 50 || 
+
+this.y < -50 || this.y > window.innerHeight + 50) {
+
+this.element.remove();
+
                     return false;
+
                 }
-                return true;
+
+                return true; // Bullet still active
+
             }
+
         }
-        
+
         function updateBullets() {
+
             for (let i = bullets.length - 1; i >= 0; i--) {
+
                 if (!bullets[i].update()) {
+
                     bullets.splice(i, 1);
+
                 }
+
             }
+
         }
-        
+
         function updateLoop() {
+
             if (!gameRunning) return;
+
             updateTargets();
+
             updateBullets();
+
             requestAnimationFrame(updateLoop);
+
         }
-        
+
         let lastShot = 0;
+
         function shoot(clientX, clientY) {
+
             const now = Date.now();
-            if (now - lastShot < 200) return;
+
+            if (now - lastShot < 200) return; // Throttle shots
+
             lastShot = now;
+
             const gunX = window.innerWidth / 2;
-            const gunY = window.innerHeight - 70;
+
+            const gunY = window.innerHeight - 60;
+
             const dx = clientX - gunX;
+
             const dy = clientY - gunY;
+
             const angle = Math.atan2(dy, dx);
+
+// Rotate gun
+
             gun.style.transform = 'translateX(-50%) rotate(' + (angle * 180 / Math.PI + 90) + 'deg)';
+
+// Create bullet
+
             bullets.push(new Bullet(gunX, gunY, angle));
+
         }
-        
-        document.addEventListener('click', e => {
-            if (gameRunning) shoot(e.clientX, e.clientY);
-        });
-        
-        document.addEventListener('touchstart', e => {
-            if (gameRunning && e.touches.length > 0) {
-                e.preventDefault();
-                const touch = e.touches[0];
-                shoot(touch.clientX, touch.clientY);
+
+// Touch/click events
+
+        document.addEventListener('click', (e) => {
+
+            if (gameRunning) {
+
+                shoot(e.clientX, e.clientY);
+
             }
+
+        });
+
+        document.addEventListener('touchstart', (e) => {
+
+            if (gameRunning && e.touches.length > 0) {
+
+                e.preventDefault();
+
+                const touch = e.touches[0];
+
+                shoot(touch.clientX, touch.clientY);
+
+            }
+
         }, { passive: false });
-        
+
         function endGame() {
+
             gameRunning = false;
+
             clearInterval(spawnInterval);
+
+// Clean up
+
             bullets.forEach(b => b.element.remove());
+
             bullets = [];
+
             targets.forEach(t => t.el.remove());
+
             targets = [];
+
+// Show completion screen
+
             setTimeout(() => {
+
                 completionScreen.classList.add('active');
+
                 startCountdown();
+
             }, 1000);
+
         }
-        
+
         function startCountdown() {
+
             let seconds = 5;
-            const el = document.getElementById('redirectCountdown');
+
+            const countdownEl = document.getElementById('redirectCountdown');
+
             const interval = setInterval(() => {
+
                 seconds--;
-                el.textContent = 'Redirecting in ' + seconds + '...';
+
+                countdownEl.textContent = 'Redirecting in ' + seconds + '...';
+
                 if (seconds <= 0) {
+
                     clearInterval(interval);
+
                     window.location.href = 'quiz.html';
+
                 }
+
             }, 1000);
+
         }
+
     </script>
+
 </body>
+
 </html>
