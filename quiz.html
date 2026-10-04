@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kaun Banega Mera Pati</title>
     <style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,22 +14,24 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-                html, body {
+                        html, body {
             width: 100%;
             height: 100%;
             overflow: hidden;
             position: fixed;
-            background: linear-gradient(-45deg, #FE2E4B, #0F0E0E, #161316, #4B4A4B, #FFFFFF);
+            background: linear-gradient(-45deg, #5D0E41, #A0153E, #FF204E, #FF6969);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
         }
         
-                .container {
+                        .container {
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, rgba(254, 46, 75, 0.1) 0%, rgba(15, 14, 14, 0.9) 100%);
+            background: linear-gradient(135deg, rgba(93, 14, 65, 0.2) 0%, rgba(160, 21, 62, 0.8) 100%);
             backdrop-filter: blur(10px);
         }
         
@@ -42,14 +46,16 @@
             display: flex;
         }
         
-                .header {
-            background: linear-gradient(135deg, #FE2E4B 0%, #A30505 50%, #0F0E0E 100%);
+                        .header {
+            background: linear-gradient(135deg, #5D0E41 0%, #A0153E 50%, #FF204E 100%);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            color: #FFFFFF;
-            padding: 20px;
+            color: #FFD700;
+            padding: 25px;
             text-align: center;
             border-radius: 0 0 20px 20px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
         }
         
         .header h1 {
@@ -78,13 +84,15 @@
             opacity: 0.9;
         }
         
-                .question {
-            font-size: 22px;
-            color: #FFFFFF;
-            font-weight: bold;
+                        .question {
+            font-size: 26px;
+            color: #FFD700;
+            font-weight: 500;
+            font-style: italic;
             text-align: center;
-            margin: 20px 0;
+            margin: 30px 0;
             line-height: 1.4;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
         
         .options {
@@ -94,27 +102,29 @@
             margin-bottom: 20px;
         }
         
-                        .option {
-            padding: 15px;
-            border: 2px solid #A30505;
+                                .option {
+            padding: 18px;
+            border: 2px solid #D4AF37;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(254, 46, 75, 0.1) 0%, rgba(163, 5, 5, 0.1) 100%);
-            font-size: 16px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(160, 21, 62, 0.2) 100%);
+            font-size: 18px;
             color: #FFFFFF;
-            font-weight: 600;
+            font-weight: 400;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            font-family: 'Cormorant Garamond', serif;
         }
         
         .option:active {
             transform: scale(0.98);
         }
         
-                .option.selected {
-            border-color: #FFFFFF;
-            background: linear-gradient(135deg, #FE2E4B 0%, #A30505 100%);
+                        .option.selected {
+            border-color: #FFD700;
+            background: linear-gradient(135deg, #FF204E 0%, #A0153E 100%);
             color: #FFFFFF;
-            box-shadow: 0 8px 25px rgba(254, 46, 75, 0.4);
+            box-shadow: 0 8px 25px rgba(255, 32, 78, 0.4);
+            font-weight: 600;
         }
         
         .option.correct {
@@ -123,17 +133,19 @@
             color: white;
         }
         
-                .next-btn {
-            padding: 15px;
+                        .next-btn {
+            padding: 18px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, #FE2E4B 0%, #A30505 100%);
-            color: #FFFFFF;
-            font-size: 16px;
-            font-weight: bold;
+            background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+            color: #5D0E41;
+            font-size: 18px;
+            font-weight: 600;
             cursor: pointer;
             margin-top: auto;
-            box-shadow: 0 4px 15px rgba(254, 46, 75, 0.3);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 1px;
         }
         
         .next-btn:disabled {
@@ -218,26 +230,48 @@
         }
         
         @media (max-width: 480px) {
-            .question {
-                font-size: 20px;
-            }
+                    .question {
+            font-size: 26px;
+            color: #FFD700;
+            font-weight: 500;
+            font-style: italic;
+            text-align: center;
+            margin: 30px 0;
+            line-height: 1.4;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
             
-                            .option {
-            padding: 15px;
-            border: 2px solid #A30505;
+                                    .option {
+            padding: 18px;
+            border: 2px solid #D4AF37;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(254, 46, 75, 0.1) 0%, rgba(163, 5, 5, 0.1) 100%);
-            font-size: 16px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(160, 21, 62, 0.2) 100%);
+            font-size: 18px;
             color: #FFFFFF;
-            font-weight: 600;
+            font-weight: 400;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            font-family: 'Cormorant Garamond', serif;
         }
             
             .bonus-text {
                 font-size: 22px;
             }
         }
+    
+        @keyframes heartConfetti {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg) scale(0); opacity: 0; }
+        }
+        
+        .quiz-confetti {
+            position: fixed;
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: heartConfetti 1.5s ease-out forwards;
+        }
+        
     </style>
 </head>
 <body>
@@ -352,7 +386,7 @@
             
             if (isCorrect) {
                 element.classList.add('correct');
-                createConfetti(element);
+                createQuizConfetti(element);
             }
             
             // Enable next button
@@ -421,7 +455,30 @@
                     document.body.appendChild(confetti);
                     
                     setTimeout(() => confetti.remove(), 1500);
-                }, i * 30);
+                }
+
+        // Romantic confetti for quiz
+        function createQuizConfetti(element) {
+            const rect = element.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            const hearts = ['💖', '✨', '💕', '🎊', '🎉'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'quiz-confetti';
+                    confetti.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    confetti.style.left = x + 'px';
+                    confetti.style.top = y + 'px';
+                    confetti.style.fontSize = (18 + Math.random() * 15) + 'px';
+                    confetti.style.color = ['#FFD700', '#D4AF37', '#FF69B4', '#FFFFFF'][Math.floor(Math.random() * 4)];
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 1500);
+                }, i * 50);
+            }
+        }
+        , i * 30);
             }
         }
         
