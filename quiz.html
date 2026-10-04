@@ -227,6 +227,11 @@
                 transform: translateY(100vh) rotate(360deg);
                 opacity: 0;
             }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         }
         
         @media (max-width: 480px) {
