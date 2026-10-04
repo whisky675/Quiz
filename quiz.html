@@ -17,7 +17,7 @@
             height: 100%;
             overflow: hidden;
             position: fixed;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #FFF59D 0%, #FFE082 25%, #FFD54F 50%, #FFB74D 75%, #FFA000 100%);
         }
         
         .container {
@@ -25,7 +25,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            background: linear-gradient(135deg, rgba(255, 245, 157, 0.95) 0%, rgba(255, 214, 79, 0.85) 100%);
             backdrop-filter: blur(10px);
         }
         
@@ -41,7 +41,7 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: linear-gradient(135deg, #FFF59D 0%, #FFD54F 50%, #FFA000 100%);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             color: white;
             padding: 20px;
@@ -67,7 +67,7 @@
         
         .progress-fill {
             height: 100%;
-            background: #FFD464;
+            background: #FFA000;
             transition: width 0.3s;
         }
         
@@ -78,7 +78,7 @@
         
         .question {
             font-size: 22px;
-            color: #B0183D;
+            color: #5D4037;
             font-weight: bold;
             text-align: center;
             margin: 20px 0;
@@ -92,13 +92,13 @@
             margin-bottom: 20px;
         }
         
-        .option {
+                .option {
             padding: 15px;
-            border: 2px solid #FFD464;
+            border: 2px solid #FFA000;
             border-radius: 12px;
-            background: rgba(255, 212, 100, 0.1);
+            background: linear-gradient(135deg, rgba(255, 245, 157, 0.3) 0%, rgba(255, 224, 130, 0.3) 100%);
             font-size: 16px;
-            color: #B0183D;
+            color: #5D4037;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -110,7 +110,7 @@
         
         .option.selected {
             border-color: #E23C64;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
             color: white;
         }
         
@@ -124,7 +124,7 @@
             padding: 15px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
             color: white;
             font-size: 16px;
             font-weight: bold;
@@ -171,7 +171,7 @@
         
         .bonus-text {
             font-size: 24px;
-            color: #B0183D;
+            color: #5D4037;
             font-weight: bold;
             margin-bottom: 30px;
             line-height: 1.4;
@@ -187,8 +187,8 @@
             padding: 15px;
             border: 2px solid #E23C64;
             border-radius: 12px;
-            background: #FFD464;
-            color: #B0183D;
+            background: #FFA000;
+            color: #5D4037;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -218,10 +218,17 @@
                 font-size: 20px;
             }
             
-            .option {
-                font-size: 15px;
-                padding: 14px;
-            }
+                    .option {
+            padding: 15px;
+            border: 2px solid #FFA000;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255, 245, 157, 0.3) 0%, rgba(255, 224, 130, 0.3) 100%);
+            font-size: 16px;
+            color: #5D4037;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
             
             .bonus-text {
                 font-size: 22px;
@@ -325,17 +332,25 @@
             const question = isBonus ? bonusQuestion : quizQuestions[currentQuestionIndex];
             const container = isBonus ? '#bonusOptionsContainer' : '#optionsContainer';
             
+            // Disable all options
             document.querySelectorAll(container + ' .option').forEach(opt => {
                 opt.style.pointerEvents = 'none';
             });
             
+            // Mark selected
             element.classList.add('selected');
             
-            if (question.correct.includes(index)) {
+            // Check if correct (handles both single number and array)
+            const isCorrect = Array.isArray(question.correct) 
+                ? question.correct.includes(index)
+                : question.correct === index;
+            
+            if (isCorrect) {
                 element.classList.add('correct');
                 createConfetti(element);
             }
             
+            // Enable next button
             const btn = isBonus ? document.getElementById('bonusNextBtn') : document.getElementById('nextBtn');
             btn.disabled = false;
         }
