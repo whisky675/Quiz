@@ -17,17 +17,17 @@
             height: 100%;
             overflow: hidden;
             position: fixed;
-            background: linear-gradient(-45deg, #FFF59D, #FFE082, #FFD54F, #FFB74D, #FFA000);
+            background: linear-gradient(-45deg, #FE2E4B, #0F0E0E, #161316, #4B4A4B, #FFFFFF);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
         }
         
-        .container {
+                .container {
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, rgba(255, 245, 157, 0.95) 0%, rgba(255, 214, 79, 0.85) 100%);
+            background: linear-gradient(135deg, rgba(254, 46, 75, 0.1) 0%, rgba(15, 14, 14, 0.9) 100%);
             backdrop-filter: blur(10px);
         }
         
@@ -42,10 +42,10 @@
             display: flex;
         }
         
-        .header {
-            background: linear-gradient(135deg, #FFF59D 0%, #FFD54F 50%, #FFA000 100%);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            color: white;
+                .header {
+            background: linear-gradient(135deg, #FE2E4B 0%, #A30505 50%, #0F0E0E 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            color: #FFFFFF;
             padding: 20px;
             text-align: center;
             border-radius: 0 0 20px 20px;
@@ -61,7 +61,7 @@
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(254, 46, 75, 0.3);
             border-radius: 3px;
             overflow: hidden;
             margin: 10px 0;
@@ -69,7 +69,7 @@
         
         .progress-fill {
             height: 100%;
-            background: #FFA000;
+            background: #FE2E4B;
             transition: width 0.3s;
         }
         
@@ -78,9 +78,9 @@
             opacity: 0.9;
         }
         
-        .question {
+                .question {
             font-size: 22px;
-            color: #5D4037;
+            color: #FFFFFF;
             font-weight: bold;
             text-align: center;
             margin: 20px 0;
@@ -94,13 +94,13 @@
             margin-bottom: 20px;
         }
         
-                .option {
+                        .option {
             padding: 15px;
-            border: 2px solid #FFA000;
+            border: 2px solid #A30505;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(255, 245, 157, 0.3) 0%, rgba(255, 224, 130, 0.3) 100%);
+            background: linear-gradient(135deg, rgba(254, 46, 75, 0.1) 0%, rgba(163, 5, 5, 0.1) 100%);
             font-size: 16px;
-            color: #5D4037;
+            color: #FFFFFF;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -110,28 +110,30 @@
             transform: scale(0.98);
         }
         
-        .option.selected {
-            border-color: #E23C64;
-            background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
-            color: white;
+                .option.selected {
+            border-color: #FFFFFF;
+            background: linear-gradient(135deg, #FE2E4B 0%, #A30505 100%);
+            color: #FFFFFF;
+            box-shadow: 0 8px 25px rgba(254, 46, 75, 0.4);
         }
         
         .option.correct {
-            border-color: #4CAF50;
+            border-color: #FFFFFF;
             background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
             color: white;
         }
         
-        .next-btn {
+                .next-btn {
             padding: 15px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, #FFD54F 0%, #FFA000 100%);
-            color: white;
+            background: linear-gradient(135deg, #FE2E4B 0%, #A30505 100%);
+            color: #FFFFFF;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             margin-top: auto;
+            box-shadow: 0 4px 15px rgba(254, 46, 75, 0.3);
         }
         
         .next-btn:disabled {
@@ -173,7 +175,7 @@
         
         .bonus-text {
             font-size: 24px;
-            color: #5D4037;
+            color: #FFFFFF;
             font-weight: bold;
             margin-bottom: 30px;
             line-height: 1.4;
@@ -185,12 +187,12 @@
             gap: 12px;
         }
         
-        .btn-bonus {
+                .btn-bonus {
             padding: 15px;
-            border: 2px solid #E23C64;
+            border: 2px solid #A30505;
             border-radius: 12px;
-            background: #FFA000;
-            color: #5D4037;
+            background: #FE2E4B;
+            color: #FFFFFF;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -220,13 +222,13 @@
                 font-size: 20px;
             }
             
-                    .option {
+                            .option {
             padding: 15px;
-            border: 2px solid #FFA000;
+            border: 2px solid #A30505;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(255, 245, 157, 0.3) 0%, rgba(255, 224, 130, 0.3) 100%);
+            background: linear-gradient(135deg, rgba(254, 46, 75, 0.1) 0%, rgba(163, 5, 5, 0.1) 100%);
             font-size: 16px;
-            color: #5D4037;
+            color: #FFFFFF;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -236,40 +238,6 @@
                 font-size: 22px;
             }
         }
-    
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        
-        .particle {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .particle:nth-child(3n) {
-            background: rgba(255, 214, 79, 0.4);
-            width: 6px;
-            height: 6px;
-        }
-        
-        .particle:nth-child(3n+1) {
-            background: rgba(255, 183, 77, 0.3);
-            width: 3px;
-            height: 3px;
-        }
-        
     </style>
 </head>
 <body>
@@ -327,8 +295,9 @@
             { question: "Would you rather...", options: ["Go on one really good date with me", "Hang out with me every weekend", "Get Matching Hoodies", "All three because obviously"], correct: 3 },
             { question: "Which financial statement shows a company's assets and liabilities?", options: ["Balance Sheet", "Cash Flow statement", "Profit and Loss account", "Trial Balance"], correct: 0 },
             { question: "What is depreciation mainly meant to account for?", options: ["Increase in asset value", "Allocation of an asset's depreciable amount over its useful life", "Cash spent on an asset", "Profit earned from an asset"], correct: 1 },
-            { question: "What has the highest ROI", options: ["Stocks", "Mutual Funds", "Spending time w me", "Ofc it is C, do not overthink it"], correct: 0 },
-            { question: "Hypothetically... if a boy who has known you for 5 months, really likes you, loves talking to you, thinks you are cute and has been waiting for the right moment ask =ed you one question...what should you answer?", options: ["", "Better Luck Next Time", "Yes idiot", "Ask the question already"], correct: 2 }
+            { question: "What has the highest ROI", options: ["Stocks", "Mutual Funds", "Spending time w me", "Ofc it is C, do not overthink it"], correct: 3 },
+            { question: "Hypothetically... if a boy who has known you for 5 months, really likes you, loves talking to you, thinks you are cute and has been waiting for the right moment ask =ed you one question...what should you answer?", options: ["huhh nigga", "Better Luck Next Time", "Yes idiot", "Ask the question already"], correct: [2,3] }
+
         ];
         
         const bonusQuestion = {
@@ -427,7 +396,7 @@
         }
         
         function finishQuiz() {
-            alert('🎉 Quiz Complete! Thanks for playing!');
+            alert('I will be waiting for your text <33');
             // You can redirect or show a final screen
         }
         
@@ -455,33 +424,6 @@
                 }, i * 30);
             }
         }
-        
-
-        // Create floating particles
-        function createParticles() {
-            const particleContainer = document.createElement('div');
-            particleContainer.style.position = 'fixed';
-            particleContainer.style.top = '0';
-            particleContainer.style.left = '0';
-            particleContainer.style.width = '100%';
-            particleContainer.style.height = '100%';
-            particleContainer.style.pointerEvents = 'none';
-            particleContainer.style.zIndex = '1';
-            document.body.appendChild(particleContainer);
-            
-            for (let i = 0; i < 25; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animation = `float ${8 + Math.random() * 10}s infinite ease-in-out`;
-                particle.style.animationDelay = Math.random() * 5 + 's';
-                particleContainer.appendChild(particle);
-            }
-        }
-        
-        // Initialize particles
-        createParticles();
         
         // Initialize
         displayQuestion();
